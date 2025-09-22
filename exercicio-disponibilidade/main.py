@@ -8,7 +8,7 @@ from stochastic import StochasticSimulator
 def availability(n, k, p):
     total = 0
     for i in range(k, n+1):
-        total += (1-p)**i * p**(n-i) * math.comb(n, i)
+        total += (p)**i * (1-p)**(n-i) * math.comb(n, i)
     print("Availability for k =", k, "is", total)
     return total
 
@@ -53,5 +53,37 @@ plt.plot(n_range, [StochasticSimulator(nv, nv, p).availability() for nv in n_ran
 plt.xlabel('n')
 plt.ylabel('Availability')
 plt.legend()
+
+# 5. Availability vs p for n=100, k=1
+n_fixed = 100
+p_range = np.linspace(0, 1, 51)  # 51 pontos de 0 a 1
+plt.figure(5)
+plt.title("Availability vs p (n=100, k=1)")
+plt.plot(p_range, [availability(n_fixed, 1, pv) for pv in p_range], marker='o', label='Analytical', color='orange')
+plt.plot(p_range, [StochasticSimulator(n_fixed, 1, pv).availability() for pv in p_range], marker='x', alpha=.5, label='Stochastic', color='blue')
+plt.xlabel('p')
+plt.ylabel('Availability')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# 6. Availability vs p for n=100, k=n/2
+plt.figure(6)
+plt.title("Availability vs p (n=100, k=50)")
+plt.plot(p_range, [availability(n_fixed, n_fixed//2, pv) for pv in p_range], marker='o', label='Analytical', color='orange')
+plt.plot(p_range, [StochasticSimulator(n_fixed, n_fixed//2, pv).availability() for pv in p_range], marker='x', alpha=.5, label='Stochastic', color='blue')
+plt.xlabel('p')
+plt.ylabel('Availability')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# 7. Availability vs p for n=100, k=n
+plt.figure(7)
+plt.title("Availability vs p (n=100, k=100)")
+plt.plot(p_range, [availability(n_fixed, n_fixed, pv) for pv in p_range], marker='o', label='Analytical', color='orange')
+plt.plot(p_range, [StochasticSimulator(n_fixed, n_fixed, pv).availability() for pv in p_range], marker='x', alpha=.5, label='Stochastic', color='blue')
+plt.xlabel('p')
+plt.ylabel('Availability')
+plt.legend()
+plt.grid(True, alpha=0.3)
 
 plt.show()
